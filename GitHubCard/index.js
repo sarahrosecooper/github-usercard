@@ -45,6 +45,37 @@ getInformation
 */
 
 const followersArray = [];
+axios
+  .get("https://api.github.com/users/sarahrosecooper/followers")
+  .then(() => {
+    return followersArray.concat([
+      "ChadDiaz",
+      "ajablanco",
+      "ORiveraJr84",
+      "BrityHemming",
+      "sarahmarie1976",
+      "cameronyoung94",
+      "tetondan",
+    ]);
+  })
+  .then((followers) => {
+    followers.map((follower) => {
+      axios
+        .get(`https://api.github.com/users/${follower}`)
+        .then((secondResponse) => {
+          console.log("secondResponse", secondResponse);
+          document
+            .querySelector(".cards")
+            .appendChild(gitCard(secondResponse.data));
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
