@@ -1,9 +1,25 @@
+import axios from "axios";
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
 
+const entryPoint = document.querySelector(".cards");
+const getInformation = axios.get(
+  "https://api.github.com/users/sarahrosecooper"
+);
+
+getInformation
+  .then((r) => {
+    console.log(r.data);
+    const gitData = gitCard(r.data);
+    entryPoint.appendChild(gitData);
+  })
+  .catch((error) => {
+    console.log("Error", error);
+  });
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -20,7 +36,7 @@
 /*
   STEP 5: Now that you have your own card getting added to the DOM, either
     follow this link in your browser https://api.github.com/users/<Your github name>/followers,
-    manually find some other users' github handles, or use the list found at the
+    manually find some other users' github handles, or use the list found at thenpm
     bottom of the page. Get at least 5 different Github usernames and add them as
     Individual strings to the friendsArray below.
 
@@ -49,6 +65,46 @@ const followersArray = [];
       </div>
     </div>
 */
+
+const gitCard = (item) => {
+  const card = document.createElement("div");
+  const userImage = document.createElement("img");
+  const cardInfo = document.createElement("div");
+  const h3 = document.createElement("h3");
+  const username = document.createElement("p");
+  const location = document.createElement("p");
+  const profile = document.createElement("p");
+  const anchor = document.createElement("a");
+  const followers = document.createElement("p");
+  const following = document.createElement("p");
+  const bio = document.createElement("p");
+
+  // classes
+
+  card.classList.add("card");
+  cardInfo.classList.add("card-info");
+  h3.classList.add("name");
+  username.classList.add("username");
+
+  // text content
+
+  userImage.src = item.avatar_url;
+  h3.textContent = item.name;
+  username.textContent = item.login;
+  location.textContent = `Location: ${item.location}`;
+  profile.textContent = "Profile: ";
+  anchor.textContent = item.html_url;
+  following.textContent = `Following: ${item.following}`;
+  followers.textContent = `Followers: ${item.followers}`;
+  bio.textContent = `Bio ${item.bio}`;
+  // append children
+
+  card.append(userImage, cardInfo);
+  cardInfo.append(h3, username, location, profile, followers, following, bio);
+  profile.appendChild(anchor);
+
+  return card;
+};
 
 /*
   List of LS Instructors Github username's:
